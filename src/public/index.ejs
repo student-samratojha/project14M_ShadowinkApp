@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= typeof title !== 'undefined' ? title : 'ShadowInk Auth' %></title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --dark:#050505;
+      --card:#0f0f0f;
+      --yellow:#facc15;
+      --line:#2b2b2b;
+      --glow:rgba(250,204,21,.25);
+    }
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      font-family:'Inter',sans-serif;
+      background:
+      linear-gradient(rgba(0,0,0,.88),rgba(0,0,0,.95)),
+      url('https://images.unsplash.com/photo-1519608487953-e999c86e7455?q=80&w=2070&auto=format&fit=crop');
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+      color:white;
+      overflow-x:hidden;
+      min-height:100vh;
+      position:relative;
+    }
+
+    /* MOVING LINES */
+    body::before{
+      content:'';
+      position:fixed;
+      inset:0;
+      background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size:60px 60px;
+      animation:gridMove 10s linear infinite;
+      z-index:-1;
+    }
+
+    @keyframes gridMove{
+      0%{
+        transform:translateY(0px);
+      }
+      100%{
+        transform:translateY(60px);
+      }
+    }
+
+    /* LIGHTNING */
+    .lightning{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:50;
+      animation:flash 8s infinite;
+    }
+
+    @keyframes flash{
+      0%,95%,100%{
+        opacity:0;
+      }
+      96%{
+        opacity:.08;
+        background:white;
+      }
+      97%{
+        opacity:0;
+      }
+      98%{
+        opacity:.18;
+        background:#9ecbff;
+      }
+    }
+
+    /* NAV */
+    .nav-blur{
+      background:rgba(0,0,0,.75);
+      backdrop-filter:blur(12px);
+      border-bottom:1px solid rgba(250,204,21,.15);
+    }
+
+    /* LOGO */
+    .bat-logo{
+      width:65px;
+      height:28px;
+      background:var(--yellow);
+      clip-path: polygon(
+      0% 50%, 10% 30%, 20% 40%, 30% 10%, 40% 35%,
+      50% 0%, 60% 35%, 70% 10%, 80% 40%, 90% 30%, 100% 50%,
+      85% 70%, 70% 60%, 60% 100%, 50% 70%, 40% 100%, 30% 60%, 15% 70%
+      );
+      filter:drop-shadow(0 0 10px rgba(250,204,21,.6));
+      animation:logoPulse 2s infinite ease-in-out;
+    }
+
+    @keyframes logoPulse{
+      0%,100%{
+        transform:scale(1);
+      }
+      50%{
+        transform:scale(1.05);
+      }
+    }
+
+    /* HERO TITLE */
+    .hero-title{
+      font-family:'Orbitron',sans-serif;
+      font-size:clamp(3rem,7vw,6rem);
+      font-weight:900;
+      line-height:1;
+      text-transform:uppercase;
+      letter-spacing:3px;
+      animation:float 4s ease-in-out infinite;
+      text-shadow:
+      0 0 10px rgba(250,204,21,.2),
+      0 0 30px rgba(250,204,21,.1);
+    }
+
+    @keyframes float{
+      0%,100%{
+        transform:translateY(0px);
+      }
+      50%{
+        transform:translateY(-12px);
+      }
+    }
+
+    /* CARD */
+    .story-card{
+      background:rgba(15,15,15,.9);
+      border:1px solid rgba(255,255,255,.05);
+      border-radius:20px;
+      overflow:hidden;
+      position:relative;
+      transform-style:preserve-3d;
+      transition:all .5s ease;
+      backdrop-filter:blur(10px);
+    }
+
+    .story-card::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      background:linear-gradient(
+      130deg,
+      transparent,
+      rgba(250,204,21,.08),
+      transparent
+      );
+      transform:translateX(-100%);
+      transition:1s;
+    }
+
+    .story-card:hover::before{
+      transform:translateX(100%);
+    }
+
+    .story-card:hover{
+      transform:
+      perspective(1000px)
+      rotateX(6deg)
+      rotateY(-6deg)
+      translateY(-12px);
+
+      border-color:rgba(250,204,21,.4);
+
+      box-shadow:
+      0 0 25px rgba(250,204,21,.15),
+      0 20px 40px rgba(0,0,0,.5);
+    }
+
+    .yellow-line{
+      width:80px;
+      height:3px;
+      background:var(--yellow);
+      margin-top:15px;
+      border-radius:20px;
+      box-shadow:0 0 20px rgba(250,204,21,.8);
+      animation:lineMove 2s infinite alternate;
+    }
+
+    @keyframes lineMove{
+      0%{
+        width:80px;
+      }
+      100%{
+        width:140px;
+      }
+    }
+
+    /* BUTTON */
+    .bat-btn{
+      background:var(--yellow);
+      color:black;
+      font-weight:700;
+      padding:12px 24px;
+      border-radius:12px;
+      transition:.4s;
+      box-shadow:0 0 15px rgba(250,204,21,.2);
+    }
+
+    .bat-btn:hover{
+      transform:translateY(-4px);
+      box-shadow:0 0 30px rgba(250,204,21,.4);
+    }
+
+    /* TEXT GLOW */
+    .yellow-glow{
+      color:var(--yellow);
+      text-shadow:0 0 15px rgba(250,204,21,.4);
+    }
+
+    /* SMOOTH */
+    .smooth{
+      transition:.4s ease;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- Lightning -->
+  <div class="lightning"></div>
+
+  <!-- Navbar -->
+  <nav class="nav-blur sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+
+      <div class="flex items-center gap-4">
+        <div class="bat-logo"></div>
+
+        <div>
+          <h1 class="text-2xl font-black tracking-[4px] yellow-glow uppercase">
+            ShadowInk
+          </h1>
+
+          <p class="text-[10px] tracking-[3px] text-gray-500 uppercase">
+            Secure Story Authentication System
+          </p>
+        </div>
+      </div>
+
+      <div class="hidden md:flex items-center gap-10 text-sm uppercase tracking-[2px] font-semibold">
+
+        <a href="/" class="hover:text-yellow-400 smooth">
+          Dashboard
+        </a>
+
+        <a href="/story/all" class="hover:text-yellow-400 smooth">
+          Stories
+        </a>
+
+        <a href="/story/create" class="hover:text-yellow-400 smooth">
+          Write
+        </a>
+
+        <a href="/login" class="hover:text-yellow-400 smooth">
+          Login
+        </a>
+
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="max-w-7xl mx-auto px-6 pt-24 pb-14">
+
+    <div class="max-w-3xl">
+
+      <h1 class="hero-title">
+        Dark Stories <br>
+        <span class="yellow-glow">Live Forever</span>
+      </h1>
+
+      <div class="yellow-line"></div>
+
+      <p class="mt-8 text-gray-400 leading-8 text-lg">
+        A cinematic authentication based story writing platform where writers
+        can create, protect and publish their secret narratives inside a secure
+        dark universe. Every story is encrypted. Every identity is protected.
+      </p>
+
+      <div class="mt-10 flex gap-5 flex-wrap">
+
+        <a href="/register" class="bat-btn">
+          Get Started
+        </a>
+
+        <a href="/story/all"
+           class="border border-yellow-500/30 px-6 py-3 rounded-xl hover:border-yellow-400 hover:bg-yellow-500/10 smooth">
+          Explore Stories
+        </a>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- CONTENT -->
+  <main class="max-w-7xl mx-auto px-6 pb-20">
+
+    <!-- TOP INFO -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+
+      <div class="story-card p-6">
+        <h3 class="text-yellow-400 text-xl font-bold mb-3">
+          Authentication Shield
+        </h3>
+
+        <p class="text-gray-400 leading-7">
+          Secure JWT based authentication system with encrypted sessions and protected access.
+        </p>
+      </div>
+
+      <div class="story-card p-6">
+        <h3 class="text-yellow-400 text-xl font-bold mb-3">
+          Story Vault
+        </h3>
+
+        <p class="text-gray-400 leading-7">
+          Store and manage your creative stories in a dark cinematic writing environment.
+        </p>
+      </div>
+
+      <div class="story-card p-6">
+        <h3 class="text-yellow-400 text-xl font-bold mb-3">
+          Night Interface
+        </h3>
+
+        <p class="text-gray-400 leading-7">
+          Smooth Batman inspired UI with glowing effects, moving grids and cinematic animations.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- DYNAMIC DATA -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+      <% if(typeof stories !== 'undefined'){ %>
+
+        <% stories.forEach(item => { %>
+
+          <div class="story-card p-7 group cursor-pointer">
+
+            <div class="flex items-center justify-between mb-4">
+
+              <h2 class="text-2xl font-bold text-yellow-400 group-hover:text-yellow-300 smooth">
+                <%= item.title %>
+              </h2>
+
+              <span class="text-[10px] tracking-[2px] uppercase text-gray-600">
+                secured
+              </span>
+
+            </div>
+
+            <p class="text-gray-400 leading-7">
+              <%= item.content %>
+            </p>
+
+            <div class="mt-6 flex items-center justify-between">
+
+              <span class="text-sm text-gray-500">
+                Shadow Archive
+              </span>
+
+              <button class="text-yellow-400 hover:text-yellow-300 smooth">
+                Read →
+              </button>
+
+            </div>
+
+          </div>
+
+        <% }) %>
+
+      <% } else { %>
+
+        <div class="story-card p-10 text-center col-span-full">
+
+          <h2 class="text-3xl font-bold yellow-glow mb-4">
+            No Stories Found
+          </h2>
+
+          <p class="text-gray-500 leading-7">
+            The archive is currently empty. Start writing your first cinematic story now.
+          </p>
+
+        </div>
+
+      <% } %>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-white/5 mt-20">
+
+    <div class="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-5">
+
+      <div>
+        <h2 class="yellow-glow font-black tracking-[4px] uppercase text-xl">
+          ShadowInk
+        </h2>
+
+        <p class="text-gray-600 text-sm mt-2">
+          Secure Auth Story Writing Platform
+        </p>
+      </div>
+
+      <p class="text-gray-700 text-xs tracking-[3px] uppercase text-center">
+        Designed For Dark Creative Writers • © 2026 ShadowInk Systems
+      </p>
+
+    </div>
+
+  </footer>
+
+</body>
+</html>

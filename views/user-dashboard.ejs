@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - <%= user.name %> - ShadowInk</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root{
+            --dark:#050505;
+            --card:#0f0f0f;
+            --yellow:#facc15;
+            --line:#2b2b2b;
+            --glow:rgba(250,204,21,.25);
+        }
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family:'Inter',sans-serif;
+            background:
+            linear-gradient(rgba(0,0,0,.9),rgba(0,0,0,.98)),
+            url('https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=2400&q=80');
+            background-size:cover;
+            background-position:center;
+            background-attachment:fixed;
+            color:white;
+            overflow-x:hidden;
+            min-height:100vh;
+            position:relative;
+        }
+
+        body::before{
+            content:'';
+            position:fixed;
+            inset:0;
+            background-image:
+            linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size:70px 70px;
+            animation:gridMove 14s linear infinite;
+            z-index:-1;
+        }
+
+        body::after{
+            content:'';
+            position:fixed;
+            inset:15% 10% auto auto;
+            width:60rem;
+            height:22rem;
+            background:rgba(250,204,21,.08);
+            clip-path: polygon(
+            0% 50%, 10% 30%, 20% 40%, 30% 15%, 40% 35%,
+            50% 5%, 60% 35%, 70% 15%, 80% 40%, 90% 30%, 100% 50%,
+            85% 70%, 70% 60%, 60% 100%, 50% 75%, 40% 100%, 30% 60%, 15% 70%
+            );
+            transform:translateX(-10%) scale(1.2);
+            opacity:.12;
+            filter:blur(3px);
+            z-index:-2;
+            pointer-events:none;
+        }
+
+        @keyframes gridMove{
+            0%{ transform:translateY(0px); }
+            100%{ transform:translateY(70px); }
+        }
+
+        .lightning{
+            position:fixed;
+            inset:0;
+            pointer-events:none;
+            z-index:50;
+            animation:flash 9s infinite;
+        }
+
+        .bg-symbol{
+            position:fixed;
+            inset:0;
+            background:radial-gradient(circle at top, rgba(250,204,21,.08), transparent 30%),
+                        radial-gradient(circle at 80% 20%, rgba(255,255,255,.04), transparent 15%);
+            opacity:.5;
+            pointer-events:none;
+            z-index:-3;
+        }
+
+        @keyframes flash{
+            0%,96%,100%{ opacity:0; }
+            97%{ opacity:.06; background:white; }
+            98%{ opacity:0; }
+            99%{ opacity:.14; background:#f8e67c; }
+        }
+
+        .nav-blur{
+            background:rgba(5,5,5,.82);
+            backdrop-filter:blur(18px);
+            border-bottom:1px solid rgba(250,204,21,.18);
+        }
+
+        .bat-logo{
+            width:56px;
+            height:24px;
+            background:var(--yellow);
+            clip-path: polygon(
+            0% 50%, 10% 30%, 20% 40%, 30% 10%, 40% 35%,
+            50% 0%, 60% 35%, 70% 10%, 80% 40%, 90% 30%, 100% 50%,
+            85% 70%, 70% 60%, 60% 100%, 50% 70%, 40% 100%, 30% 60%, 15% 70%
+            );
+            filter:drop-shadow(0 0 12px rgba(250,204,21,.5));
+            animation:logoFloat 8s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat{
+            0%,100%{ transform:translateY(0) scale(1); }
+            50%{ transform:translateY(-4px) scale(1.02); }
+        }
+
+        .story-card{
+            background:rgba(10,10,10,.88);
+            border:1px solid rgba(255,255,255,.08);
+            border-radius:24px;
+            overflow:hidden;
+            position:relative;
+            transform-style:preserve-3d;
+            transition:all .5s ease;
+            backdrop-filter:blur(16px);
+        }
+
+        .story-card::before{
+            content:'';
+            position:absolute;
+            inset:0;
+            background:linear-gradient(135deg, transparent 0%, rgba(250,204,21,.06) 50%, transparent 100%);
+            transform:translateX(-100%);
+            transition:1s;
+            pointer-events:none;
+        }
+
+        .story-card:hover::before{
+            transform:translateX(100%);
+        }
+
+        .story-card:hover{
+            transform:perspective(1000px) rotateX(4deg) rotateY(-4deg) translateY(-10px);
+            border-color:rgba(250,204,21,.22);
+            box-shadow:0 20px 45px rgba(0,0,0,.45);
+        }
+
+        .bat-btn{
+            background:var(--yellow);
+            color:#111;
+            font-weight:700;
+            padding:.9rem 1.8rem;
+            border-radius:14px;
+            transition:.3s ease;
+            box-shadow:0 0 18px rgba(250,204,21,.2);
+        }
+
+        .bat-btn:hover{
+            transform:translateY(-2px);
+            box-shadow:0 0 32px rgba(250,204,21,.35);
+        }
+
+        .glass-btn{
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            background:rgba(255,255,255,.07);
+            color:#d8d8d8;
+            border:1px solid rgba(255,255,255,.1);
+            border-radius:14px;
+            padding:.85rem 1.5rem;
+            transition:.3s ease;
+        }
+
+        .glass-btn:hover{
+            background:rgba(250,204,21,.08);
+            border-color:rgba(250,204,21,.25);
+            color:white;
+        }
+
+        .yellow-glow{
+            color:var(--yellow);
+            text-shadow:0 0 14px rgba(250,204,21,.35);
+        }
+
+        .stat-card{
+            background:rgba(255,255,255,.04);
+            border:1px solid rgba(255,255,255,.08);
+            border-radius:20px;
+            padding:1.25rem;
+        }
+
+        .stat-card strong{
+            display:block;
+            font-size:1.75rem;
+            color:white;
+            margin-top:.65rem;
+        }
+
+        .story-meta{
+            display:grid;
+            grid-template-columns:repeat(3,minmax(0,1fr));
+            gap:1rem;
+            margin-top:1.5rem;
+        }
+
+        .story-meta p{
+            color:#94a3b8;
+            font-size:.85rem;
+            text-transform:uppercase;
+            letter-spacing:.24em;
+        }
+
+        .smooth{
+            transition:.4s ease;
+        }
+
+        .quiet-title{
+            font-size:clamp(1.5rem,2vw,2.6rem);
+            font-weight:700;
+            letter-spacing:.04em;
+            line-height:1.1;
+        }
+
+        .story-summary{
+            color:#cbd5e1;
+            line-height:1.85;
+            margin-top:.75rem;
+        }
+
+        .story-actions{
+            display:grid;
+            gap:.75rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen relative overflow-x-hidden">
+    <div class="lightning"></div>
+    <div class="bg-symbol"></div>
+
+    <nav class="nav-blur sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div class="flex items-center gap-4">
+                <div class="bat-logo"></div>
+                <div>
+                    <p class="text-xs uppercase tracking-[3px] text-gray-400">ShadowInk</p>
+                    <h1 class="text-xl sm:text-2xl font-semibold tracking-[1px] yellow-glow uppercase">Secure User Console</h1>
+                </div>
+            </div>
+            <div class="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[1px] font-semibold text-gray-300">
+                <a href="/" class="glass-btn">Dashboard</a>
+                <a href="/story/all" class="glass-btn">Stories</a>
+                <a href="/story/create" class="glass-btn">Write</a>
+                <a href="/auth/logout" class="bat-btn">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-6 py-10 relative z-10">
+        <section class="grid gap-8 lg:grid-cols-[1.4fr_0.8fr]">
+            <div class="story-card p-8 border border-zinc-700 shadow-xl">
+                <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+                    <div>
+                        <p class="text-xs uppercase tracking-[4px] text-gray-500">User summary</p>
+                        <h2 class="quiet-title text-white">Welcome back, <span class="yellow-glow"><%= user.name %></span></h2>
+                        <p class="mt-3 text-gray-400 max-w-2xl">This is your secure story workspace. Manage your vault, review drafts, and remove any story you no longer want to keep.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <a href="/story/create" class="bat-btn">New Story</a>
+                        <a href="/story/all" class="glass-btn">Open Archive</a>
+                    </div>
+                </div>
+
+                <div class="story-meta">
+                    <div class="stat-card">
+                        <p>Stories</p>
+                        <strong><%= stories?.length || 0 %></strong>
+                    </div>
+                    <div class="stat-card">
+                        <p>Role</p>
+                        <strong class="capitalize"><%= user.role %></strong>
+                    </div>
+                    <div class="stat-card">
+                        <p>Email</p>
+                        <strong class="truncate"><%= user.email %></strong>
+                    </div>
+                </div>
+            </div>
+
+            <aside class="space-y-6">
+                <div class="story-card p-6 border border-yellow-500/10">
+                    <p class="text-xs uppercase tracking-[4px] text-gray-500">Quick access</p>
+                    <h3 class="text-2xl font-semibold yellow-glow">Secure Controls</h3>
+                    <p class="mt-3 text-gray-400 leading-7">Use the delete button to remove any story you no longer need. This action keeps your vault clean and private.</p>
+                </div>
+                <div class="story-card p-6 border border-zinc-700/80 bg-zinc-950/60">
+                    <p class="text-xs uppercase tracking-[4px] text-gray-500">Environment</p>
+                    <p class="mt-3 text-gray-400 leading-7">Professional Dark Theme · Batman-inspired security · Ultra HD atmosphere for a premium console feel.</p>
+                </div>
+            </aside>
+        </section>
+
+        <section class="mt-10">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                    <p class="text-xs uppercase tracking-[4px] text-gray-500">My stories</p>
+                    <h3 class="text-2xl font-semibold text-white">Vault entries</h3>
+                </div>
+                <span class="text-sm text-gray-400">Showing <%= stories?.length || 0 %> entries</span>
+            </div>
+
+            <div class="mt-6 grid gap-5">
+                <% if (stories && stories.length) { %>
+                    <% stories.forEach(function(story) { %>
+                        <div class="story-card p-6 sm:p-7 grid gap-4 sm:grid-cols-[1fr_auto] sm:items-start">
+                            <div>
+                                <p class="text-xs uppercase tracking-[2px] text-gray-500">Story</p>
+                                <h4 class="text-xl font-semibold text-white"><%= story.title %></h4>
+                                <p class="story-summary"><%= story.content ? story.content.substring(0, 130) : 'No preview available.' %>...</p>
+                                <div class="mt-4 flex flex-wrap gap-3 text-xs uppercase tracking-[2px] text-gray-400">
+                                    <span><%= new Date(story.createdAt).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) %></span>
+                                    <span>&bull;</span>
+                                    <span><%= story.likes?.length || 0 %> likes</span>
+                                </div>
+                            </div>
+                            <div class="story-actions">
+                                <a href="/story/<%= story._id %>" class="glass-btn w-full text-center">View</a>
+                                <form action="/story/delete" method="POST" class="w-full">
+                                    <input type="hidden" name="storyId" value="<%= story._id %>">
+                                    <button type="submit" class="bat-btn w-full">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <div class="story-card p-8 text-center">
+                        <p class="text-gray-400">No stories found in your vault yet. Start writing to populate this secure archive.</p>
+                    </div>
+                <% } %>
+            </div>
+        </section>
+    </main>
+
+    <footer class="mt-20 border-t border-white/5 py-8 text-center text-[10px] uppercase tracking-widest text-gray-500">
+        ShadowInk Secure Console © 2026
+    </footer>
+</body>
+</html>

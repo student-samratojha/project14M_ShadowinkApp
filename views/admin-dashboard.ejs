@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - ShadowInk</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root{
+            --dark:#050505;
+            --card:#0f0f0f;
+            --yellow:#facc15;
+            --line:#2b2b2b;
+            --glow:rgba(250,204,21,.25);
+        }
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family:'Inter',sans-serif;
+            background:
+            linear-gradient(rgba(0,0,0,.88),rgba(0,0,0,.95)),
+            url('https://images.unsplash.com/photo-1519608487953-e999c86e7455?q=80&w=2070&auto=format&fit=crop');
+            background-size:cover;
+            background-position:center;
+            background-attachment:fixed;
+            color:white;
+            overflow-x:hidden;
+            min-height:100vh;
+            position:relative;
+        }
+
+        /* MOVING LINES */
+        body::before{
+            content:'';
+            position:fixed;
+            inset:0;
+            background-image:
+            linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size:60px 60px;
+            animation:gridMove 10s linear infinite;
+            z-index:-1;
+        }
+
+        @keyframes gridMove{
+            0%{
+                transform:translateY(0px);
+            }
+            100%{
+                transform:translateY(60px);
+            }
+        }
+
+        /* LIGHTNING */
+        .lightning{
+            position:fixed;
+            inset:0;
+            pointer-events:none;
+            z-index:50;
+            animation:flash 8s infinite;
+        }
+
+        @keyframes flash{
+            0%,95%,100%{
+                opacity:0;
+            }
+            96%{
+                opacity:.08;
+                background:white;
+            }
+            97%{
+                opacity:0;
+            }
+            98%{
+                opacity:.18;
+                background:#9ecbff;
+            }
+        }
+
+        /* NAV */
+        .nav-blur{
+            background:rgba(0,0,0,.75);
+            backdrop-filter:blur(12px);
+            border-bottom:1px solid rgba(250,204,21,.15);
+        }
+
+        /* LOGO */
+        .bat-logo{
+            width:65px;
+            height:28px;
+            background:var(--yellow);
+            clip-path: polygon(
+            0% 50%, 10% 30%, 20% 40%, 30% 10%, 40% 35%,
+            50% 0%, 60% 35%, 70% 10%, 80% 40%, 90% 30%, 100% 50%,
+            85% 70%, 70% 60%, 60% 100%, 50% 70%, 40% 100%, 30% 60%, 15% 70%
+            );
+            filter:drop-shadow(0 0 10px rgba(250,204,21,.6));
+            animation:logoPulse 2s infinite ease-in-out;
+        }
+
+        @keyframes logoPulse{
+            0%,100%{
+                transform:scale(1);
+            }
+            50%{
+                transform:scale(1.05);
+            }
+        }
+
+        /* CARD */
+        .story-card{
+            background:rgba(15,15,15,.9);
+            border:1px solid rgba(255,255,255,.05);
+            border-radius:20px;
+            overflow:hidden;
+            position:relative;
+            transform-style:preserve-3d;
+            transition:all .5s ease;
+            backdrop-filter:blur(10px);
+        }
+
+        .story-card::before{
+            content:'';
+            position:absolute;
+            inset:0;
+            background:linear-gradient(
+            130deg,
+            transparent,
+            rgba(250,204,21,.08),
+            transparent
+            );
+            transform:translateX(-100%);
+            transition:1s;
+        }
+
+        .story-card:hover::before{
+            transform:translateX(100%);
+        }
+
+        .story-card:hover{
+            transform:
+            perspective(1000px)
+            rotateX(6deg)
+            rotateY(-6deg)
+            translateY(-12px);
+
+            border-color:rgba(250,204,21,.4);
+
+            box-shadow:
+            0 0 25px rgba(250,204,21,.15),
+            0 20px 40px rgba(0,0,0,.5);
+        }
+
+        /* BUTTON */
+        .bat-btn{
+            background:var(--yellow);
+            color:black;
+            font-weight:700;
+            padding:12px 24px;
+            border-radius:12px;
+            transition:.4s;
+            box-shadow:0 0 15px rgba(250,204,21,.2);
+        }
+
+        .bat-btn:hover{
+            transform:translateY(-4px);
+            box-shadow:0 0 30px rgba(250,204,21,.4);
+        }
+
+        /* TEXT GLOW */
+        .yellow-glow{
+            color:var(--yellow);
+            text-shadow:0 0 15px rgba(250,204,21,.4);
+        }
+
+        /* SMOOTH */
+        .smooth{
+            transition:.4s ease;
+        }
+
+        /* Floating Animation for Header */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen relative overflow-x-hidden">
+    <!-- Lightning Effect Layer -->
+    <div class="lightning"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="nav-blur sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <div class="bat-logo"></div>
+                <div>
+                    <h1 class="text-2xl font-black tracking-[4px] yellow-glow uppercase">
+                        ShadowInk
+                    </h1>
+                    <p class="text-[10px] tracking-[3px] text-gray-500 uppercase">
+                        Secure Story Authentication System
+                    </p>
+                </div>
+            </div>
+            <div class="hidden md:flex items-center gap-10 text-sm uppercase tracking-[2px] font-semibold">
+                <a href="/" class="hover:text-yellow-400 smooth">Dashboard</a>
+                <a href="/story/all" class="hover:text-yellow-400 smooth">Stories</a>
+                <a href="/story/create" class="hover:text-yellow-400 smooth">Write</a>
+                <a href="/auth/logout" class="hover:text-yellow-400 smooth">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto p-6 space-y-12">
+        <!-- Users Table -->
+        <section>
+            <h2 class="text-2xl font-black italic text-yellow-500 mb-6 uppercase tracking-widest border-l-4 border-yellow-500 pl-4 float-animation">Civilian Records</h2>
+            <div class="bg-zinc-900 rounded border border-zinc-800 overflow-hidden bat-card">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-zinc-800 text-zinc-400 text-xs uppercase font-bold">
+                        <tr>
+                            <th class="p-4">Name</th>
+                            <th class="p-4">Email</th>
+                            <th class="p-4">Role</th>
+                            <th class="p-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-zinc-800">
+                        <% users.forEach(u => { %>
+                            <tr class="hover:bg-zinc-800/50 transition">
+                                <td class="p-4"><%= u.name %></td>
+                                <td class="p-4 text-zinc-400"><%= u.email %></td>
+                                <td class="p-4">
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase <%= u.role === 'admin' ? 'bg-yellow-500 text-black' : 'bg-zinc-700 text-white' %>">
+                                        <%= u.role %>
+                                    </span>
+                                </td>
+                                <td class="p-4">
+                                    <form action="/auth/delete/<%= u._id %>?_method=DELETE" method="POST" onsubmit="return confirm('Terminate this record?')">
+                                        <!-- If using method-override, the above works. Otherwise, use a script or link -->
+                                        <button type="submit" class="text-red-500 hover:text-red-400 text-xs font-bold uppercase tracking-tighter">Terminate</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Audit Logs -->
+        <section>
+            <h2 class="text-2xl font-black italic text-yellow-500 mb-6 uppercase tracking-widest border-l-4 border-yellow-500 pl-4 float-animation">Security Audit Trails</h2>
+            <div class="bg-zinc-900 rounded border border-zinc-800 overflow-hidden bat-card">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-zinc-800 text-zinc-400 text-xs uppercase font-bold">
+                        <tr>
+                            <th class="p-4">Identity</th>
+                            <th class="p-4">Action</th>
+                            <th class="p-4">Route</th>
+                            <th class="p-4">Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-zinc-800">
+                        <% audits.forEach(log => { %>
+                            <tr class="text-sm font-mono">
+                                <td class="p-4">
+                                    <span class="text-yellow-500"><%= log.user?.name || 'GUEST' %></span>
+                                </td>
+                                <td class="p-4">
+                                    <span class="text-blue-400"><%= log.action %></span>
+                                </td>
+                                <td class="p-4 text-zinc-500">
+                                    [<%= log.method %>] <%= log.route %>
+                                </td>
+                                <td class="p-4 text-zinc-500 text-xs">
+                                    <%= new Date(log.createdAt).toLocaleString() %>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="mt-20 border-t border-gray-900 py-8 text-center text-[10px] uppercase tracking-widest text-gray-700">
+        Property of Wayne Enterprises &copy; 2024 - Confidentiality Level 5 Required
+    </footer>
+</body>
+</html>

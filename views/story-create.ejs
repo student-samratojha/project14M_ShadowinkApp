@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= typeof title !== 'undefined' ? title : 'Create Story - ShadowInk' %></title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --dark:#050505;
+      --card:#0f0f0f;
+      --yellow:#facc15;
+      --line:#2b2b2b;
+      --glow:rgba(250,204,21,.25);
+    }
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      font-family:'Inter',sans-serif;
+      background:
+      linear-gradient(rgba(0,0,0,.88),rgba(0,0,0,.95)),
+      url('https://images.unsplash.com/photo-1519608487953-e999c86e7455?q=80&w=2070&auto=format&fit=crop');
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+      color:white;
+      overflow-x:hidden;
+      min-height:100vh;
+      position:relative;
+    }
+
+    /* MOVING LINES */
+    body::before{
+      content:'';
+      position:fixed;
+      inset:0;
+      background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size:60px 60px;
+      animation:gridMove 10s linear infinite;
+      z-index:-1;
+    }
+
+    @keyframes gridMove{
+      0%{
+        transform:translateY(0px);
+      }
+      100%{
+        transform:translateY(60px);
+      }
+    }
+
+    /* LIGHTNING */
+    .lightning{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:50;
+      animation:flash 8s infinite;
+    }
+
+    @keyframes flash{
+      0%,95%,100%{
+        opacity:0;
+      }
+      96%{
+        opacity:.08;
+        background:white;
+      }
+      97%{
+        opacity:0;
+      }
+      98%{
+        opacity:.18;
+        background:#9ecbff;
+      }
+    }
+
+    /* NAV */
+    .nav-blur{
+      background:rgba(0,0,0,.75);
+      backdrop-filter:blur(12px);
+      border-bottom:1px solid rgba(250,204,21,.15);
+    }
+
+    /* LOGO */
+    .bat-logo{
+      width:65px;
+      height:28px;
+      background:var(--yellow);
+      clip-path: polygon(
+      0% 50%, 10% 30%, 20% 40%, 30% 10%, 40% 35%,
+      50% 0%, 60% 35%, 70% 10%, 80% 40%, 90% 30%, 100% 50%,
+      85% 70%, 70% 60%, 60% 100%, 50% 70%, 40% 100%, 30% 60%, 15% 70%
+      );
+      filter:drop-shadow(0 0 8px rgba(250,204,21,.35));
+      animation:logoFloat 7s ease-in-out infinite;
+    }
+
+    @keyframes logoFloat{
+      0%,100%{
+        transform:translateY(0px) scale(1);
+      }
+      50%{
+        transform:translateY(-4px) scale(1.02);
+      }
+    }
+
+    /* HERO TITLE */
+    .hero-title{
+      font-family:'Orbitron',sans-serif;
+      font-size:clamp(2rem,4vw,3.2rem);
+      font-weight:700;
+      line-height:1.05;
+      text-transform:uppercase;
+      letter-spacing:2px;
+      animation:float 7s ease-in-out infinite;
+      text-shadow:
+      0 0 6px rgba(250,204,21,.15),
+      0 0 18px rgba(250,204,21,.08);
+    }
+
+    @keyframes float{
+      0%,100%{
+        transform:translateY(0px);
+      }
+      50%{
+        transform:translateY(-12px);
+      }
+    }
+
+    /* CARD */
+    .story-card{
+      background:rgba(15,15,15,.9);
+      border:1px solid rgba(255,255,255,.05);
+      border-radius:20px;
+      overflow:hidden;
+      position:relative;
+      transform-style:preserve-3d;
+      transition:all .5s ease;
+      backdrop-filter:blur(10px);
+    }
+
+    .story-card::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      background:linear-gradient(
+      130deg,
+      transparent,
+      rgba(250,204,21,.08),
+      transparent
+      );
+      transform:translateX(-100%);
+      transition:1s;
+    }
+
+    .story-card:hover::before{
+      transform:translateX(100%);
+    }
+
+    .story-card:hover{
+      transform:
+      perspective(1000px)
+      rotateX(6deg)
+      rotateY(-6deg)
+      translateY(-12px);
+
+      border-color:rgba(250,204,21,.4);
+
+      box-shadow:
+      0 0 25px rgba(250,204,21,.15),
+      0 20px 40px rgba(0,0,0,.5);
+    }
+
+    .yellow-line{
+      width:80px;
+      height:3px;
+      background:var(--yellow);
+      margin-top:15px;
+      border-radius:20px;
+      box-shadow:0 0 20px rgba(250,204,21,.8);
+      animation:lineMove 2s infinite alternate;
+    }
+
+    @keyframes lineMove{
+      0%{
+        width:80px;
+      }
+      100%{
+        width:140px;
+      }
+    }
+
+    /* BUTTON */
+    .bat-btn{
+      background:var(--yellow);
+      color:black;
+      font-weight:700;
+      padding:12px 24px;
+      border-radius:12px;
+      transition:.4s;
+      box-shadow:0 0 15px rgba(250,204,21,.2);
+    }
+
+    .bat-btn:hover{
+      transform:translateY(-4px);
+      box-shadow:0 0 30px rgba(250,204,21,.4);
+    }
+
+    /* TAGDA BOUNCING ANIMATION */
+    .tagda-bounce{
+      animation:bounce 1s infinite;
+    }
+
+    @keyframes bounce{
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-10px);
+      }
+      60% {
+        transform: translateY(-5px);
+      }
+    }
+
+    /* TEXT GLOW */
+    .yellow-glow{
+      color:var(--yellow);
+      text-shadow:0 0 15px rgba(250,204,21,.4);
+    }
+
+    /* SMOOTH */
+    .smooth{
+      transition:.4s ease;
+    }
+
+    /* FORM STYLES */
+    .story-form{
+      background:rgba(15,15,15,.95);
+      border:1px solid rgba(250,204,21,.2);
+      border-radius:20px;
+      backdrop-filter:blur(15px);
+    }
+
+    .story-input{
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:12px;
+      color:white;
+      transition:.3s;
+    }
+
+    .story-input:focus{
+      border-color:var(--yellow);
+      box-shadow:0 0 15px rgba(250,204,21,.2);
+    }
+
+    .story-textarea{
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:12px;
+      color:white;
+      resize:vertical;
+      min-height:300px;
+      transition:.3s;
+    }
+
+    .story-textarea:focus{
+      border-color:var(--yellow);
+      box-shadow:0 0 15px rgba(250,204,21,.2);
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- Lightning -->
+  <div class="lightning"></div>
+
+  <!-- Navbar -->
+  <nav class="nav-blur sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+
+      <div class="flex items-center gap-4">
+        <div class="bat-logo"></div>
+
+        <div>
+          <h1 class="text-xl font-semibold tracking-[2px] yellow-glow uppercase">
+            ShadowInk
+          </h1>
+
+          <p class="text-[10px] tracking-[2px] text-gray-500 uppercase">
+            secure story workspace
+          </p>
+        </div>
+      </div>
+
+      <div class="hidden md:flex items-center gap-10 text-sm uppercase tracking-[2px] font-semibold">
+
+        <a href="/story/all" class="hover:text-yellow-400 smooth text-sm uppercase tracking-[1px]">
+          Stories
+        </a>
+        <a href="/secure/user" class="hover:text-yellow-400 smooth text-sm uppercase tracking-[1px]">
+          Home
+        </a>
+
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="max-w-7xl mx-auto px-6 pt-24 pb-14">
+
+    <div class="max-w-3xl">
+
+      <h1 class="hero-title text-3xl sm:text-4xl font-semibold tracking-[1px]">
+        Secure Story Draft
+      </h1>
+
+      <p class="mt-6 text-gray-400 leading-7 text-base max-w-xl">
+        Write in a discreet, encrypted environment. This is the secure page for crafting stories quietly.
+      </p>
+
+    </div>
+
+  </section>
+
+  <!-- CONTENT -->
+  <main class="max-w-4xl mx-auto px-6 pb-20">
+
+    <div class="story-form p-8">
+
+      <% if (locals.error) { %>
+        <div class="bg-red-900/50 border border-red-500 text-red-200 px-4 py-2 rounded mb-6 text-sm">
+          <%= error %>
+        </div>
+      <% } %>
+
+      <form action="/story/create" method="POST" class="space-y-6">
+
+        <div>
+          <label class="block text-yellow-400 font-bold mb-2 uppercase tracking-wider text-sm">
+            Story Title
+          </label>
+          <input type="text" name="title" required
+                 class="story-input w-full px-4 py-3 focus:outline-none"
+                 placeholder="Enter your story title...">
+        </div>
+
+        <div>
+          <label class="block text-yellow-400 font-bold mb-2 uppercase tracking-wider text-sm">
+            Your Dark Narrative
+          </label>
+          <textarea name="content" required
+                    class="story-textarea w-full px-4 py-3 focus:outline-none"
+                    placeholder="Write your story here... Let the darkness inspire you..."></textarea>
+        </div>
+
+        <div class="flex gap-4 flex-wrap">
+
+          <button type="submit" class="bat-btn tagda-bounce">
+            🚀 Publish Story
+          </button>
+
+          <a href="/story/all" class="border border-yellow-500/30 px-6 py-3 rounded-xl hover:border-yellow-400 hover:bg-yellow-500/10 smooth">
+            View All Stories
+          </a>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-white/5 mt-20">
+
+    <div class="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-5">
+
+      <div>
+        <h2 class="yellow-glow font-black tracking-[4px] uppercase text-xl">
+          ShadowInk
+        </h2>
+
+        <p class="text-gray-600 text-sm mt-2">
+          Secure Auth Story Writing Platform
+        </p>
+      </div>
+
+      <p class="text-gray-700 text-xs tracking-[3px] uppercase text-center">
+        Designed For Dark Creative Writers • © 2026 ShadowInk Systems
+      </p>
+
+    </div>
+
+  </footer>
+
+</body>
+</html>

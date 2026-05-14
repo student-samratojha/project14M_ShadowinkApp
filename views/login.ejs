@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ShadowInk</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root{
+            --dark:#050505;
+            --card:#0f0f0f;
+            --yellow:#facc15;
+            --line:#2b2b2b;
+            --glow:rgba(250,204,21,.25);
+        }
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family:'Inter',sans-serif;
+            background:
+            linear-gradient(rgba(0,0,0,.88),rgba(0,0,0,.95)),
+            url('https://images.unsplash.com/photo-1519608487953-e999c86e7455?q=80&w=2070&auto=format&fit=crop');
+            background-size:cover;
+            background-position:center;
+            background-attachment:fixed;
+            color:white;
+            overflow-x:hidden;
+            min-height:100vh;
+            position:relative;
+        }
+
+        /* MOVING LINES */
+        body::before{
+            content:'';
+            position:fixed;
+            inset:0;
+            background-image:
+            linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size:60px 60px;
+            animation:gridMove 10s linear infinite;
+            z-index:-1;
+        }
+
+        @keyframes gridMove{
+            0%{
+                transform:translateY(0px);
+            }
+            100%{
+                transform:translateY(60px);
+            }
+        }
+
+        /* LIGHTNING */
+        .lightning{
+            position:fixed;
+            inset:0;
+            pointer-events:none;
+            z-index:50;
+            animation:flash 8s infinite;
+        }
+
+        @keyframes flash{
+            0%,95%,100%{
+                opacity:0;
+            }
+            96%{
+                opacity:.08;
+                background:white;
+            }
+            97%{
+                opacity:0;
+            }
+            98%{
+                opacity:.18;
+                background:#9ecbff;
+            }
+        }
+
+        /* CARD */
+        .story-card{
+            background:rgba(15,15,15,.9);
+            border:1px solid rgba(255,255,255,.05);
+            border-radius:20px;
+            overflow:hidden;
+            position:relative;
+            transform-style:preserve-3d;
+            transition:all .5s ease;
+            backdrop-filter:blur(10px);
+        }
+
+        .story-card::before{
+            content:'';
+            position:absolute;
+            inset:0;
+            background:linear-gradient(
+            130deg,
+            transparent,
+            rgba(250,204,21,.08),
+            transparent
+            );
+            transform:translateX(-100%);
+            transition:1s;
+        }
+
+        .story-card:hover::before{
+            transform:translateX(100%);
+        }
+
+        .story-card:hover{
+            transform:
+            perspective(1000px)
+            rotateX(6deg)
+            rotateY(-6deg)
+            translateY(-12px);
+
+            border-color:rgba(250,204,21,.4);
+
+            box-shadow:
+            0 0 25px rgba(250,204,21,.15),
+            0 20px 40px rgba(0,0,0,.5);
+        }
+
+        /* BUTTON */
+        .bat-btn{
+            background:var(--yellow);
+            color:black;
+            font-weight:700;
+            padding:12px 24px;
+            border-radius:12px;
+            transition:.4s;
+            box-shadow:0 0 15px rgba(250,204,21,.2);
+        }
+
+        .bat-btn:hover{
+            transform:translateY(-4px);
+            box-shadow:0 0 30px rgba(250,204,21,.4);
+        }
+
+        /* TEXT GLOW */
+        .yellow-glow{
+            color:var(--yellow);
+            text-shadow:0 0 15px rgba(250,204,21,.4);
+        }
+
+        /* SMOOTH */
+        .smooth{
+            transition:.4s ease;
+        }
+
+        /* FORM STYLES */
+        .story-form{
+            background:rgba(15,15,15,.95);
+            border:1px solid rgba(250,204,21,.2);
+            border-radius:20px;
+            backdrop-filter:blur(15px);
+        }
+
+        .story-input{
+            background:rgba(255,255,255,.05);
+            border:1px solid rgba(255,255,255,.1);
+            border-radius:12px;
+            color:white;
+            transition:.3s;
+        }
+
+        .story-input:focus{
+            border-color:var(--yellow);
+            box-shadow:0 0 15px rgba(250,204,21,.2);
+        }
+
+        /* Floating Animation for Header */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen relative overflow-x-hidden flex flex-col">
+    <!-- Lightning Effect Layer -->
+    <div class="lightning"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="nav-blur sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <div class="bat-logo"></div>
+                <div>
+                    <h1 class="text-2xl font-black tracking-[4px] yellow-glow uppercase">
+                        ShadowInk
+                    </h1>
+                    <p class="text-[10px] tracking-[3px] text-gray-500 uppercase">
+                        Secure Story Authentication System
+                    </p>
+                </div>
+            </div>
+            <div class="hidden md:flex items-center gap-10 text-sm uppercase tracking-[2px] font-semibold">
+                <a href="/" class="hover:text-yellow-400 smooth">Dashboard</a>
+                <a href="/auth/register" class="hover:text-yellow-400 smooth">Register</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-1 flex items-center justify-center px-4 py-12">
+        <div class="w-full max-w-md story-card p-8">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-yellow-500 tracking-tighter italic float-animation">WELCOME BACK</h2>
+                <p class="text-zinc-500">Provide your credentials to enter the cave.</p>
+            </div>
+
+            <% if (locals.error) { %>
+                <div class="bg-red-900/50 border border-red-500 text-red-200 px-4 py-2 rounded mb-6 text-sm">
+                    <%= error %>
+                </div>
+            <% } %>
+
+            <form action="/auth/login" method="POST" class="space-y-6">
+                <div>
+                    <label class="block text-xs font-bold text-yellow-500 uppercase tracking-widest mb-1">Email</label>
+                    <input type="email" name="email" required class="story-input w-full px-4 py-3 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-yellow-500 uppercase tracking-widest mb-1">Pass-Code</label>
+                    <input type="password" name="password" required class="story-input w-full px-4 py-3 focus:outline-none">
+                </div>
+                <button type="submit" class="bat-btn w-full">
+                    Verify Identity
+                </button>
+            </form>
+
+            <div class="mt-6 text-center text-sm text-zinc-500">
+                New to the city? <a href="/auth/register" class="text-yellow-500 hover:underline">Register here.</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-gray-900 py-8 text-center text-[10px] uppercase tracking-widest text-gray-700">
+        Property of Wayne Enterprises &copy; 2024 - Confidentiality Level 5 Required
+    </footer>
+</body>
+</html>
