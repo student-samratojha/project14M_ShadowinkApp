@@ -42,11 +42,4 @@ ShadowInk ek cinematic, Batman-themed story writing platform hai. Yahan writers 
    npm start
    ```
 
-## 📸 Preview
-Project mein ek cinematic lightning effect hai jo har 8 seconds mein background ko flash karta hai, bilkul Gotham ki baarish wali raat ki tarah.
-
----
-
-> "It's not who I am underneath, but what I do that defines me." — **ShadowInk**
-
 *Designed for Dark Creative Writers.*
